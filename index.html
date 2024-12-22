@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Flip Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game">
+        <div class="card" id="card1" onclick="checkCard(this)">
+            <img src="assets/wrong_card.png" alt="Wrong Card">
+        </div>
+        <div class="card" id="card2" onclick="checkCard(this)">
+            <img src="assets/correct_card.png" alt="Correct Card">
+        </div>
+        <p id="result"></p>
+        <button id="reset" onclick="resetGame()">
+            <img src="assets/reset_button.png" alt="Reset">
+        </button>
+    </div>
+    <audio id="sfx" src="assets/revealing_sfx.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
