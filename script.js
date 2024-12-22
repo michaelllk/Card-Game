@@ -1,6 +1,13 @@
 let correctCardIndex = Math.floor(Math.random() * 2) + 1;
 let hasFlipped = false;
 
+// Start the background music when the page loads
+window.onload = () => {
+    const bgm = document.getElementById('bgm');
+    bgm.volume = 0.5; // Adjust the volume (0.0 to 1.0)
+    bgm.play();
+};
+
 function checkCard(card) {
     if (hasFlipped) return;
 
