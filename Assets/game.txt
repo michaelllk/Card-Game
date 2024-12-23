@@ -1,0 +1,46 @@
+// ==UserScript==
+// @name         Starve.io AdBlocker
+// @namespace    https://starve.io/
+// @version      1.0
+// @description  Removes ads and unnecessary elements in Starve.io
+// @author       YourName
+// @match        https://starve.io/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Function to remove ad elements
+    const removeAds = () => {
+        const adSelectors = [
+            '.ad', // Generic ad class
+            '#ads', // Generic ad ID
+            '[id*="ad"]', // IDs containing "ad"
+            '[class*="ad"]', // Classes containing "ad"
+            '.banner-ad', // Example specific ad class
+            'iframe[src*="ad"]', // Ad-related iframes
+            '.pop-up', // Pop-ups (if applicable)
+        ];
+
+        adSelectors.forEach(selector => {
+            const adElements = document.querySelectorAll(selector);
+            adElements.forEach(el => el.remove());
+        });
+    };
+
+    // Run the ad removal initially
+    removeAds();
+
+    // Set up a MutationObserver to handle dynamically loaded elements
+    const observer = new MutationObserver(() => {
+        removeAds();
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
+
+    console.log('Starve.io AdBlocker Script Activated!');
+})();
