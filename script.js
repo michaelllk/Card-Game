@@ -18,7 +18,8 @@ function checkCard(card) {
     const isCorrect = cardId === correctCardIndex;
 
     const resultText = document.getElementById('result');
-    const sfx = document.getElementById('sfx');
+    const ohSfx = document.getElementById('oh-sfx'); // Wrong card sound
+    const clappingSfx = document.getElementById('clapping-sfx'); // Correct card sound
 
     // Change the card image based on the result
     card.querySelector('img').src = isCorrect
@@ -26,15 +27,17 @@ function checkCard(card) {
         : "assets/wrong_card.png";
 
     card.classList.add('flipped');
-    sfx.play();
 
+    // Delay playing the sound effect by 0.2 seconds
     setTimeout(() => {
         if (isCorrect) {
+            clappingSfx.play(); // Play clapping sound
             resultText.textContent = "Correct! 🎉";
         } else {
+            ohSfx.play(); // Play "oh" sound
             resultText.textContent = "Wrong! Try again.";
         }
-    }, 600);
+    }, 200); // Play sound after 0.2 seconds
 
     hasFlipped = true;
 }
