@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Starve.io Ad Blocker (Google & WebGames.io)
+// @name         Starve.io Ad Blocker (Safe Mode)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Removes Google Ads and WebGames.io ads from Starve.io when pressing X
+// @version      1.2
+// @description  Safely removes Google Ads and WebGames.io ads from Starve.io when pressing X
 // @author       You
 // @match        *://starve.io/*
 // @grant        none
@@ -15,7 +15,7 @@
     document.addEventListener("keydown", (event) => {
         if (event.key.toLowerCase() === "x") {
             // Remove ads
-            removeAds();
+            safelyRemoveAds();
 
             // Display confirmation text
             const textElement = document.createElement("div");
@@ -41,27 +41,37 @@
         }
     });
 
-    function removeAds() {
-        console.log("Scanning and removing ads...");
+    function safelyRemoveAds() {
+        console.log("Safely scanning and removing ads...");
 
-        // Remove Google Ads (iframes or divs containing Google AdSense)
-        document.querySelectorAll('iframe[src*="google"], div[id*="google"]').forEach((googleAd) => {
-            googleAd.remove();
-            console.log("Removed a Google Ad");
+        // Collect ads but avoid game-critical elements
+        const ads = [
+            ...document.querySelectorAll('iframe[src*="google"], div[id*="google"]'),
+            ...document.querySelectorAll('iframe[src*="webgames.io"], div[src*="webgames.io"]'),
+            ...document.querySelectorAll('[class*="ad"], [id*="ad"]'),
+        ];
+
+        ads.forEach((ad) => {
+            // Only remove elements that are clearly ads and not critical game elements
+            if (ad.offsetParent !== null && !isGameCritical(ad)) {
+                ad.remove();
+                console.log("Removed an ad:", ad);
+            }
         });
 
-        // Remove WebGames.io Ads (iframes or divs containing WebGames.io)
-        document.querySelectorAll('iframe[src*="webgames.io"], div[src*="webgames.io"]').forEach((webgamesAd) => {
-            webgamesAd.remove();
-            console.log("Removed a WebGames.io Ad");
-        });
+        console.log("Safe ad removal completed!");
+    }
 
-        // Remove other ad containers (based on common keywords like "ad")
-        document.querySelectorAll('[class*="ad"], [id*="ad"]').forEach((ad) => {
-            ad.remove();
-            console.log("Removed an ad container");
-        });
+    function isGameCritical(element) {
+        // List of IDs or classes that are game-critical (example placeholders)
+        const gameCriticalIds = ["gameCanvas", "mainMenu", "footer", "header"];
+        const gameCriticalClasses = ["main-container", "game-container"];
 
-        console.log("Ad removal completed!");
+        const idCheck = element.id && gameCriticalIds.includes(element.id);
+        const classCheck =
+            element.classList &&
+            [...element.classList].some((cls) => gameCriticalClasses.includes(cls));
+
+        return idCheck || classCheck;
     }
 })();
