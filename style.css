@@ -5,7 +5,8 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: black; /* Set the background to black */
+    color: white; /* Set text color to white for visibility */
 }
 
 #game {
@@ -35,10 +36,12 @@ body {
 #result {
     margin: 20px 0;
     font-size: 1.2em;
+    color: white; /* Ensure result text is visible on the black background */
 }
 
 #reset {
     background: none;
     border: none;
     cursor: pointer;
+    color: white; /* Adjust reset button text/icon color */
 }
