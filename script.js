@@ -5,7 +5,10 @@ let hasFlipped = false;
 window.onload = () => {
     const bgm = document.getElementById('bgm');
     bgm.volume = 0.5; // Adjust the volume (0.0 to 1.0)
-    bgm.play();
+    bgm.loop = true; // Ensure the music loops
+    bgm.play().catch((err) => {
+        console.log("Autoplay blocked: User needs to interact first.");
+    });
 };
 
 function checkCard(card) {
