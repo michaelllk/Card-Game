@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Starve.io AdBlocker
+// @name         Starve.io AdBlocker (Key Activation)
 // @namespace    https://starve.io/
-// @version      1.0
-// @description  Removes ads and unnecessary elements in Starve.io
+// @version      1.2
+// @description  Removes ads from Starve.io when you press 'X' in the main menu.
 // @author       YourName
 // @match        https://starve.io/*
 // @grant        none
@@ -11,36 +11,43 @@
 (function() {
     'use strict';
 
-    // Function to remove ad elements
+    let adsRemoved = false; // Track if ads have already been removed
+
+    // Function to safely remove ad elements
     const removeAds = () => {
         const adSelectors = [
-            '.ad', // Generic ad class
-            '#ads', // Generic ad ID
-            '[id*="ad"]', // IDs containing "ad"
-            '[class*="ad"]', // Classes containing "ad"
-            '.banner-ad', // Example specific ad class
-            'iframe[src*="ad"]', // Ad-related iframes
-            '.pop-up', // Pop-ups (if applicable)
+            'iframe[src*="ads"]', // Ad-related iframes
+            'div[class*="ad"]', // Divs with "ad" in their class name
+            'div[id*="ad"]', // Divs with "ad" in their ID
+            '.ad-banner', // Common banner ads
+            '#ad-container', // Example ad container
+            '.ad-box', // Example ad box
+            '.pop-up-ad', // Example pop-up ad
         ];
 
         adSelectors.forEach(selector => {
-            const adElements = document.querySelectorAll(selector);
-            adElements.forEach(el => el.remove());
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                el.style.display = 'none'; // Hide instead of removing to avoid breaking layouts
+                console.log(`Ad element hidden: ${selector}`);
+            });
         });
+
+        adsRemoved = true; // Mark ads as removed
+        console.log('Ads have been removed!');
     };
 
-    // Run the ad removal initially
-    removeAds();
-
-    // Set up a MutationObserver to handle dynamically loaded elements
-    const observer = new MutationObserver(() => {
-        removeAds();
+    // Add a keyboard listener to detect 'X' key press
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'x' || event.key === 'X') {
+            if (!adsRemoved) {
+                console.log("Key 'X' pressed. Removing ads...");
+                removeAds();
+            } else {
+                console.log('Ads have already been removed.');
+            }
+        }
     });
 
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-    });
-
-    console.log('Starve.io AdBlocker Script Activated!');
+    console.log('Starve.io AdBlocker Script Loaded! Press "X" in the main menu to activate.');
 })();
